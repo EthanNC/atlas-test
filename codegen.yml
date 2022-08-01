@@ -1,0 +1,9 @@
+overwrite: true
+schema: 'https://midichlorian.wpengine.com/graphql' # GraphQL endpoint via the nexus dev server
+documents: 'src/graphql/**/*.graphql.ts' # parse graphql operations in matching files
+generates:
+  generated/graphql.tsx: # location for generated types, hooks and components
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-apollo'

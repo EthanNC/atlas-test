@@ -1,6 +1,11 @@
+import { ApolloProvider, NormalizedCacheObject } from '@apollo/client';
 import { AppProps } from 'next/app';
 
 import '@/styles/globals.css';
+
+import Layout from '@/components/layout/Layout';
+
+import { useApollo } from '@/context/apollo';
 
 /**
  * !STARTERCONF info
@@ -8,7 +13,17 @@ import '@/styles/globals.css';
  */
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  const apolloClient = useApollo(
+    pageProps.initialApolloState as NormalizedCacheObject
+  );
+
+  return (
+    <ApolloProvider client={apolloClient}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </ApolloProvider>
+  );
 }
 
 export default MyApp;
