@@ -5,6 +5,16 @@ export const AllPostsQuery = gql`
     posts {
       nodes {
         title
+        featuredImage {
+          node {
+            isPreview
+            mediaItemUrl
+            mediaDetails {
+              width
+              height
+            }
+          }
+        }
       }
     }
   }
