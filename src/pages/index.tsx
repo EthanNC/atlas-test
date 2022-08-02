@@ -1,10 +1,13 @@
-import { useAllPostsQuery } from 'generated/graphql';
+import { AllPostsDocument, useAllPostsQuery } from 'generated/graphql';
 import Image from 'next/image';
+import { GetStaticProps } from 'next/types';
 import * as React from 'react';
 
 import Layout from '@/components/layout/Layout';
 import UnderlineLink from '@/components/links/UnderlineLink';
 import Seo from '@/components/Seo';
+
+import { initializeApollo } from '@/context/apollo';
 
 /**
  * SVGR Support
@@ -14,18 +17,14 @@ import Seo from '@/components/Seo';
  * @see https://stackoverflow.com/questions/68103844/how-to-override-next-js-svg-module-declaration
  */
 
-// !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
-// Before you begin editing, follow all comments with `STARTERCONF`,
-// to customize the default configuration.
-
-export default function HomePage() {
+function HomePage() {
   const { data } = useAllPostsQuery({
     onCompleted: () => {
       return true;
     },
   });
 
-  // const posts = data?.posts?.nodes;
+  const posts = data?.posts?.nodes;
 
   return (
     <Layout>
@@ -38,10 +37,9 @@ export default function HomePage() {
           {/* <i>Querying Wordpress:</i> {JSON.stringify(posts)} */}
           <h1>Blog Posts</h1>
           <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
-            {data?.posts?.nodes?.map((post) => {
-              // if (!search) return true
+            {posts?.map((post) => {
               return (
-                <article className='card glass' key={post?.title}>
+                <article className='card glass' key={post?.slug}>
                   <figure className='image-full'>
                     <Image
                       // useSkeleton
@@ -57,9 +55,11 @@ export default function HomePage() {
                     />
                   </figure>
                   <div className='card-body'>
-                    <title className='card-title'> {post?.title} </title>
+                    <div className='card-title'> {post?.title} </div>
                     <div className='card-actions text-xs uppercase'>
-                      <UnderlineLink href='/'>Read More</UnderlineLink>
+                      <UnderlineLink href={`/posts/${post?.slug}`}>
+                        Read More
+                      </UnderlineLink>
                     </div>
                   </div>
                 </article>
@@ -71,3 +71,18 @@ export default function HomePage() {
     </Layout>
   );
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  const apolloClient = initializeApollo();
+  await apolloClient.query({
+    query: AllPostsDocument,
+  });
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+    },
+  };
+};
+
+export default HomePage;

@@ -5,6 +5,7 @@ export const AllPostsQuery = gql`
     posts {
       nodes {
         title
+        slug
         featuredImage {
           node {
             isPreview
@@ -16,6 +17,16 @@ export const AllPostsQuery = gql`
           }
         }
       }
+    }
+  }
+`;
+
+export const SinglePostQuery = gql`
+  query singlePost($idType: PostIdType = SLUG, $slug: ID!) {
+    post(idType: $idType, id: $slug) {
+      title
+      content
+      date
     }
   }
 `;
