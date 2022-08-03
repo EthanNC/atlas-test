@@ -3,8 +3,6 @@ import { AppProps } from 'next/app';
 
 import '@/styles/globals.css';
 
-import Layout from '@/components/layout/Layout';
-
 import { useApollo } from '@/context/apollo';
 
 /**
@@ -19,9 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <Component {...pageProps} />
     </ApolloProvider>
   );
 }

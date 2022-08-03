@@ -4,6 +4,7 @@ import {
   SinglePostDocument,
   useSinglePostQuery,
 } from 'generated/graphql';
+import DOMPurify from 'isomorphic-dompurify';
 import { useRouter } from 'next/router';
 import { GetStaticPaths, GetStaticProps } from 'next/types';
 import * as React from 'react';
@@ -24,6 +25,9 @@ function PostPage() {
     },
   });
   const post = data?.post;
+
+  //NOTE: Might not need to sanatize content
+  const cleanedContent = DOMPurify.sanitize(post?.content as string);
   return (
     <Layout>
       <Seo templateTitle={post?.title as string} />
@@ -32,7 +36,11 @@ function PostPage() {
         <section className=''>
           <div className='layout min-h-screen py-20'>
             <h1>{post?.title}</h1>
-            {post?.content}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: cleanedContent,
+              }}
+            ></div>
           </div>
         </section>
       </main>

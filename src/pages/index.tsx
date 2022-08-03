@@ -28,43 +28,45 @@ function HomePage() {
 
   return (
     <Layout>
-      {/* <Seo templateTitle='Home' /> */}
-      <Seo />
+      <Seo templateTitle='Home' />
 
       <main>
         <section className='flex flex-col items-center justify-center gap-3'>
           {/* <Posts /> */}
           {/* <i>Querying Wordpress:</i> {JSON.stringify(posts)} */}
-          <h1>Blog Posts</h1>
-          <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
-            {posts?.map((post) => {
-              return (
-                <article className='card glass' key={post?.slug}>
-                  <figure className='image-full'>
-                    <Image
-                      // useSkeleton
-                      src={post?.featuredImage?.node?.mediaItemUrl as string}
-                      width={
-                        post?.featuredImage?.node?.mediaDetails?.width as number
-                      }
-                      height={
-                        post?.featuredImage?.node?.mediaDetails
-                          ?.height as number
-                      }
-                      alt='featured image'
-                    />
-                  </figure>
-                  <div className='card-body'>
-                    <div className='card-title'> {post?.title} </div>
-                    <div className='card-actions text-xs uppercase'>
-                      <UnderlineLink href={`/posts/${post?.slug}`}>
-                        Read More
-                      </UnderlineLink>
+          <div className='layout min-h-screen py-20'>
+            <h1>Blog Posts</h1>
+            <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
+              {posts?.map((post) => {
+                return (
+                  <article className='card glass' key={post?.slug}>
+                    <figure className='image-full'>
+                      <Image
+                        // useSkeleton
+                        src={post?.featuredImage?.node?.mediaItemUrl as string}
+                        width={
+                          post?.featuredImage?.node?.mediaDetails
+                            ?.width as number
+                        }
+                        height={
+                          post?.featuredImage?.node?.mediaDetails
+                            ?.height as number
+                        }
+                        alt='featured image'
+                      />
+                    </figure>
+                    <div className='card-body'>
+                      <div className='card-title'> {post?.title} </div>
+                      <div className='card-actions text-xs uppercase'>
+                        <UnderlineLink href={`/posts/${post?.slug}`}>
+                          Read More
+                        </UnderlineLink>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              );
-            })}
+                  </article>
+                );
+              })}
+            </div>
           </div>
         </section>
       </main>
